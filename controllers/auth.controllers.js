@@ -2,7 +2,7 @@ const Role = require('../models/Roles')
 const User = require('../models/User')
 const { createToken } = require('../utils/jwt')
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   const { email, password, roles, dni } = req.body
 
   // Prevent empty fields
@@ -35,8 +35,34 @@ const register = async (req, res) => {
   res.status(200).json({ token })
 }
 
-const login = (req, res) => {
-  res.send('login')
+const login = async (req, res) => {
+  const { email, password } = req.body
+
+  // Prevent empty fields
+  if (!(email && password))
+    return res.status(400).json({
+      error: 'some parameter missing',
+    })
+
+  // Checking if the user's email is correct
+  const user = await User.findOne({ email })
+
+  if (!user)
+    return res.status(400).json({
+      error: 'The email or password is incorrect',
+    })
+
+  // Checking if the user's password match with the password of the DB
+  const correctPassword = await User.comparePassword(password, user.password)
+
+  if (!correctPassword)
+    return res.status(400).json({
+      error: 'The email or password is incorrect',
+    })
+
+  const token = createToken({ id: user._id })
+
+  res.status(200).json({ token })
 }
 
 module.exports = {
