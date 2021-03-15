@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
+const Role = require('./Roles')
 
 const userSchema = new mongoose.Schema({
   email: {

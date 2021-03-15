@@ -6,6 +6,10 @@ const logger = require('./utils/logger')
 const authRoutes = require('./routes/auth.routes')
 const welcomeRoute = require('./routes/welcome.route')
 const config = require('./utils/config')
+const { initializeRoles } = require('./utils/initializeRoles')
+
+// Setting
+initializeRoles()
 
 // Connection at the DB
 logger.info('🔎🔎 connecting to', config.MONGODB_URI)
@@ -13,6 +17,7 @@ mongoose
   .connect(config.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
   })
   .then(() => {
     logger.info('✅️✅️ Connections to database succefully')
