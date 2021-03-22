@@ -1,6 +1,6 @@
 const Role = require('../models/Roles')
 const User = require('../models/User')
-const { createToken } = require('../utils/jwt')
+const { createJWT } = require('../utils/jwt')
 
 const register = async (req, res, next) => {
   const { email, password, roles, dni } = req.body
@@ -30,9 +30,9 @@ const register = async (req, res, next) => {
   // Saving user in the database
   const savedUser = await newUser.save()
 
-  const token = createToken({ id: savedUser._id })
+  const jwt = createJWT({ id: savedUser._id })
 
-  res.status(200).json({ token })
+  res.status(200).json({ jwt })
 }
 
 const login = async (req, res) => {
@@ -60,9 +60,9 @@ const login = async (req, res) => {
       error: 'The email or password is incorrect',
     })
 
-  const token = createToken({ id: user._id })
+  const jwt = createJWT({ id: user._id })
 
-  res.status(200).json({ token })
+  res.status(200).json({ jwt })
 }
 
 module.exports = {

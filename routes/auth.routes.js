@@ -1,13 +1,14 @@
 const authRoutes = require('express').Router()
 const authControllers = require('../controllers/auth.controllers')
-const { verifyToken, isAdmin, isClient } = require('../middlewares/authJWT')
+const { verifyJWT, isAdmin, isClient } = require('../middlewares/authJWT')
+const checkRolesExisted = require('../middlewares/verifySingup')
 
 // Routes /api/auth
 authRoutes.post('/login', authControllers.login)
 
-authRoutes.post('/register', authControllers.register)
+authRoutes.post('/register', [checkRolesExisted], authControllers.register)
 
-authRoutes.get('/pruebaJWT', [verifyToken, isAdmin], (req, res) => {
+authRoutes.get('/pruebaJWT', [verifyJWT, isAdmin], (req, res) => {
   res.send('solo si tiene token y es administrador')
 })
 

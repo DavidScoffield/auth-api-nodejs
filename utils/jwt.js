@@ -1,15 +1,15 @@
 const jwt = require('jsonwebtoken')
 const { SECRETKEY } = require('./config')
 
-const createToken = ({ id }) => {
+const createJWT = ({ id }) => {
   return jwt.sign({ id }, SECRETKEY, { expiresIn: 86400 })
 }
 
-const decodeToken = (token) => {
-  return jwt.verify(token, SECRETKEY)
+const decodeJWT = (jwt) => {
+  return jwt.verify(jwt, SECRETKEY)
 }
 
 module.exports = {
-  createToken,
-  decodeToken,
+  createJWT,
+  decodeJWT,
 }
